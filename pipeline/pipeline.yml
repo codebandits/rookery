@@ -1,0 +1,37 @@
+---
+jobs:
+- name: publish
+  plan:
+  - get: image-source
+    trigger: true
+  - get: image-version
+    params: {bump: patch}
+  - put: docker-hub
+    params:
+      build: image-source/image
+      tag: image-version/number
+      tag_as_latest: true
+  - put: image-version
+    params: {file: image-version/number}
+
+resources:
+- name: image-source
+  type: git
+  source:
+    uri: https://github.com/codebandits/rookery.git
+    branch: master
+    paths:
+    - image
+- name: image-version
+  type: semver
+  source:
+    driver: gcs
+    bucket: rookery-versions
+    key: image-version
+    json_key: ((gcp-credential))
+- name: docker-hub
+  type: docker-image
+  source:
+    repository: codebandits/rookery
+    username: ((dockerhub.username))
+    password: ((dockerhub.password))
