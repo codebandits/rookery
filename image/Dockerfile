@@ -1,13 +1,18 @@
 FROM ubuntu:latest
 
 RUN apt-get update \
-    && apt-get install -y curl unzip bzip2 xvfb openjdk-8-jdk lsb-release build-essential \
+    && apt-get install -y curl unzip bzip2 xvfb openjdk-8-jdk lsb-release build-essential apt-transport-https \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y mysql-server \
     && curl -s https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
     && curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add - \
+    && curl -s https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key | apt-key add - \
     && echo "deb http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list \
     && echo "deb http://packages.cloud.google.com/apt cloud-sdk-$(lsb_release -c -s) main" > /etc/apt/sources.list.d/google-cloud-sdk.list \
-    && apt-get update && apt-get install -y google-chrome-stable google-cloud-sdk \
+    && echo "deb http://packages.cloudfoundry.org/debian stable main" > /etc/apt/sources.list.d/cloudfoundry-cli.list \
+    && apt-get update && apt-get install -y \
+        google-chrome-stable \
+        google-cloud-sdk \
+        cf-cli \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 

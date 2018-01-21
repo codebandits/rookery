@@ -7,6 +7,7 @@ Rookery is an evolving Concourse task container image. It supplies functionality
 - Google Chrome, ChromeDriver, and Xvfb for use in browser tests
 - OpenJDK JDK 8
 - MySQL Server
+- Cloud Foundry CLI
 
 ## Usage
 
